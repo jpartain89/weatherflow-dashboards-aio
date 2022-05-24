@@ -1,3 +1,2 @@
 !.tpl
 docker-compose.yml
-generate_docker-compose_aio.sh
