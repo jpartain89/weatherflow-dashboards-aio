@@ -13,6 +13,11 @@ services:
       - 8086:8086
     networks:
       - grafana-external
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   wxfdashboardsaio-collector:
     container_name: wxfdashboardsaio-collector-08ce4425
@@ -26,6 +31,11 @@ services:
       - 50222:50222/udp
     networks:
       - grafana-external
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50222"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   grafana-external:
