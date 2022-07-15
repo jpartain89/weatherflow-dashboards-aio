@@ -11,8 +11,6 @@ services:
       - /docker/weatherflow/influxdb:/var/lib/influxdb:rw
     ports:
       - 8086:8086
-    networks:
-      - grafana-external
 
   wxfdashboardsaio-collector:
     container_name: wxfdashboardsaio-collector-08ce4425
@@ -23,9 +21,7 @@ services:
       - "wxfdashboardsaio_influxdb"
     image: lux4rd0/weatherflow-collector:latest
     ports:
-      - 50222:50222/udp
-    networks:
-      - grafana-external
+      - 50222:50222
 
 networks:
   grafana-external:
