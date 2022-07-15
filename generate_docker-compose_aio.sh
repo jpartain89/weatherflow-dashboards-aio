@@ -118,18 +118,6 @@ fi
 echo "
 
 services:
-  wxfdashboardsaio_grafana:
-    container_name: wxfdashboardsaio_grafana
-    environment:
-      TZ: ${timezone[$station_number]}
-    image: lux4rd0/weatherflow-dashboards-grafana:latest
-    ports:
-    - protocol: tcp
-      published: 3000
-      target: 3000
-    restart: always
-    volumes:
-    - wxfdashboardsaio-grafana-data:/var/lib/grafana
   wxfdashboardsaio_influxdb:
     container_name: wxfdashboardsaio_influxdb
     environment:
@@ -171,7 +159,7 @@ services:
       WEATHERFLOW_COLLECTOR_INFLUXDB_PASSWORD: $(op item get WeatherFlowDashboards --field label=WEATHERFLOW_COLLECTOR_INFLUXDB_PASSWORD)
       WEATHERFLOW_COLLECTOR_INFLUXDB_URL: http://wxfdashboardsaio_influxdb:8086/write?db=weatherflow
       WEATHERFLOW_COLLECTOR_INFLUXDB_USERNAME: weatherflow
-      WEATHERFLOW_COLLECTOR_TOKEN: ${token}
+      WEATHERFLOW_COLLECTOR_TOKEN: $(op item get WeatherFlowDashboards --field label=WEATHERFLOW_COLLECTOR_TOKEN)
     restart: always
     depends_on:
       - \"wxfdashboardsaio_influxdb\"
@@ -181,9 +169,6 @@ services:
       published: 50222
       target: 50222
     restart: always
-volumes:
-  wxfdashboardsaio-grafana-data:   
-  wxfdashboardsaio-influxdb-data: 
 version: '3.3'" >> docker-compose.yml
 
 
@@ -225,7 +210,7 @@ echo "docker run --rm \\
   -e WEATHERFLOW_COLLECTOR_INFLUXDB_USERNAME=weatherflow \\
   -e WEATHERFLOW_COLLECTOR_STATION_ID=\"${station_id[$station_number]}\" \\
   -e WEATHERFLOW_COLLECTOR_THREADS=${threads} \\
-  -e WEATHERFLOW_COLLECTOR_TOKEN=${token} \\
+  -e WEATHERFLOW_COLLECTOR_TOKEN=$(op item get WeatherFlowDashboards --field label=WEATHERFLOW_COLLECTOR_TOKEN) \\
   lux4rd0/weatherflow-collector:latest
 
 " > "${FILE_import_remote[$station_number]}"
